@@ -1,0 +1,1 @@
+# Magazine class with SQL methods
