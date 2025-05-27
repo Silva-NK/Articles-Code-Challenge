@@ -7,10 +7,10 @@ CREATE TABLE IF NOT EXISTS authors (
 );
 
 
---Magazines table
+-- Magazines table
 CREATE TABLE IF NOT EXISTS magazines (
     id INTEGER PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL UNIQUE,
     category VARCHAR(255) NOT NULL
 );
 

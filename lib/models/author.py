@@ -1,5 +1,7 @@
 # Author class with SQL methods
 
+import sqlite3
+
 from lib.db.connection import get_connection
 
 class Author:
@@ -36,8 +38,39 @@ class Author:
                 self._id = cursor.lastrowid
             else:
                 raise Exception(f"Author with ID {self._id} already exists. Save operation stopped.")
+            
             conn.commit()
+
         finally:
+            
             conn.close()
 
         return self
+    
+
+    @classmethod
+    def find_by_id(cls, id):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM authors WHERE id = ?", (id,))
+        row = cursor.fetchone()
+        conn.close()
+
+        if row:
+            return cls(id=row[0], name=row[1])
+        return None
+    
+
+    @classmethod
+    def find_by_name(cls, name):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM authors WHERE name = ?", (name,))
+        row = cursor.fetchone()
+        conn.close()
+
+        if row:
+            return cls(id=row[0], name=row[1])
+        return None
