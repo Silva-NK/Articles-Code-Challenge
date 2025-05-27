@@ -203,3 +203,21 @@ class Magazine:
         conn.close()
 
         return [Author(id=row[0], name=row[1]) for row in rows]
+    
+
+    @classmethod
+    def top_publisher(cls):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(""" SELECT m.*, COUNT(a.id) as article_count FROM magazines m
+                       JOIN articles a ON m.id = a.magazine_id
+                       GROUP BY m.id ORDER BY article_count DESC LIMIT 1
+                       """)
+
+        row = cursor.fetchone()
+        conn.close()
+
+        if row:
+            return cls(id=row[0], name=row[1], category=row[2])
+        return None

@@ -111,7 +111,7 @@ class Author:
 
         cursor.execute(""" SELECT a.id, a.name, COUNT(ar.id) as article_count FROM authors a
                        JOIN articles ar ON a.id = ar.author_id 
-                       GROUP BY a.id LIMIT 1;
+                       GROUP BY a.id ORDER BY article_count DESC LIMIT 1;
                        """)
         
         row = cursor.fetchone()
