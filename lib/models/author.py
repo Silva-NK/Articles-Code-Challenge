@@ -74,3 +74,50 @@ class Author:
         if row:
             return cls(id=row[0], name=row[1])
         return None
+    
+
+    def articles(self):
+        from lib.models.article import Article
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(""" SELECT * FROM articles WHERE author_id = ? """, (self.id,))
+        rows = cursor.fetchall()
+        conn.close()
+
+        return [Article(id=row[0], title=row[1], author_id=row[2], magazine_id=row[3]) for row in rows]
+    
+
+    def magazines(self):
+        from lib.models.magazine import Magazine
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(""" 
+                       SELECT DISTINCT m.* 
+                       FROM magazines m JOIN articles a ON m.id = a.magazine_id 
+                       WHERE a.author_id = ? ORDER BY m.id ASC
+                       """, (self.id,))
+        rows = cursor.fetchall()
+        conn.close()
+
+        return [Magazine(id=row[0], name=row[1], category=row[2]) for row in rows]
+    
+
+    @classmethod
+    def author_aficionado(cls):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(""" SELECT a.id, a.name, COUNT(ar.id) as article_count FROM authors a
+                       JOIN articles ar ON a.id = ar.author_id 
+                       GROUP BY a.id LIMIT 1;
+                       """)
+        
+        row = cursor.fetchone()
+        conn.close()
+
+        if row:
+            return cls(id=row[0], name=row[1]), row[2]
+        return None, 0
+        

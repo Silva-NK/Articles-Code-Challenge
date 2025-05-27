@@ -106,3 +106,47 @@ class Magazine:
             return cls(id=row[0], name=row[1], category=row[2])
         return None
     
+
+    def authors(self):
+        from lib.models.author import Author
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+                       SELECT DISTINCT a.* FROM authors a JOIN articles ar ON a.id = ar.author_id
+                       WHERE ar.magazine_id = ? ORDER BY a.id ASC
+                       """, (self.id,))
+        rows = cursor.fetchall()
+        conn.close()
+
+        return [Author(id=row[0], name=row[1]) for row in rows]
+    
+
+    @classmethod
+    def mags_with_many_authors(cls):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(""" SELECT m.* FROM magazines m JOIN articles a ON m.id = a.magazine_id
+                       GROUP BY m.id HAVING COUNT(DISTINCT a.author_id) >= 2;
+                       """)
+        rows = cursor.fetchall()
+        conn.close()
+
+        return [cls(id=row[0], name=row[1], category=row[2]) for row in rows]
+    
+
+    @classmethod
+    def count_articles(cls):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(""" SELECT m.name, COUNT(a.id) as article_count FROM magazines m
+                       LEFT JOIN articles a ON m.id = a.magazine_id
+                       GROUP BY m.id
+                       """)
+        
+        results = cursor.fetchall()
+        conn.close()
+
+        return results
