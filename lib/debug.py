@@ -18,6 +18,10 @@ from lib.db.connection import get_connection
 # author3.save()
 # print(f"Author saved with id = {author3.id} and name = '{author3.name}'")
 
+# author4 = Author(name="Lois Lane")
+# author4.save()
+# print(f"Author saved with id = {author4.id} and name = '{author4.name}'")
+
 
 
 # mag1 = Magazine(name="Daily Planet", category="Developing Stories")
@@ -38,7 +42,7 @@ from lib.db.connection import get_connection
 # article1.save()
 # print(f"Article saved with id = {article1.id} and title = '{article1.title}' in '{article1.magazine_id}' by '{article1.author_id}'")
 
-# article2 = Article(title="What will SPiderman ruin next?", author_id=2, magazine_id=2)
+# article2 = Article(title="What will Spiderman ruin next?", author_id=2, magazine_id=2)
 # article2.save()
 # print(f"Article saved with id = {article2.id} and title = '{article2.title}' in '{article2.magazine_id}' by '{article2.author_id}'")
 
@@ -66,40 +70,48 @@ from lib.db.connection import get_connection
 
 
 
-author = Author.find_by_id(3)
-if author:
-    print(f"-- Articles by {author.name} --")
-    for article in author.articles():
-        print(f"{article.id}: {article.title}")
+# author = Author.find_by_id(3)
+# if author:
+#     print(f"-- Articles by {author.name} --")
+#     for article in author.articles():
+#         print(f"{article.id}: {article.title}")
 
-    print(f"-- Magazines {author.name} has written for --")
-    for mag in author.magazines():
-        print(f"{mag.id}: {mag.name} - {mag.category}")
-else:
-    print("Author not found.")
-
-
-
-mag = Magazine.find_by_name("Daily Bugle")
-print(f"-- Authors for {mag.name} --")
-for author in mag.authors():
-    print(f"{author.id}: {author.name}")
+#     print(f"-- Magazines {author.name} has written for --")
+#     for mag in author.magazines():
+#         print(f"{mag.id}: {mag.name} - {mag.category}")
+# else:
+#     print("Author not found.")
 
 
 
-print("-- Magazines with multiple authors --")
-magazines = Magazine.mags_with_many_authors()
-for mag in magazines:
-    print(f"{mag.name} ({mag.category})")
+# mag = Magazine.find_by_name("Daily Bugle")
+# print(f"-- Authors for {mag.name} --")
+# for author in mag.authors():
+#     print(f"{author.id}: {author.name}")
 
 
 
-print("-- Article counts per magazine --")
-for name, count in Magazine.count_articles():
-    print(f"{name} has {count} articles.")
+# print("-- Magazines with multiple authors --")
+# magazines = Magazine.mags_with_many_authors()
+# for mag in magazines:
+#     print(f"{mag.name} ({mag.category})")
 
 
 
-print("-- Leading author by article count --")
-author_aficionado, count = Author.author_aficionado()
-print(f"Leading author is {author_aficionado.name} with {count} articles.")
+# print("-- Article counts per magazine --")
+# for name, count in Magazine.count_articles():
+#     print(f"{name} has {count} articles.")
+
+
+
+# print("-- Leading author by article count --")
+# author_aficionado, count = Author.author_aficionado()
+# print(f"Leading author is {author_aficionado.name} with {count} articles.")
+
+
+
+# article6 = author4.add_article(mag1, "Know your heroes: Connor Kent. Meet Superman's petri dish son.")
+# print(f"Article saved: {article6.id} - {article6.title}")
+
+# article7 = author3.add_article(2, "Inhuman Sightings in Colombia")
+# print(f"Article saved: {article7.id} - {article7.title}")
